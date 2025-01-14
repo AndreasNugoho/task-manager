@@ -102,3 +102,11 @@ body {
   border-right: 8px solid #3aafae;
   transform: translateY(-50%);
 }
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
