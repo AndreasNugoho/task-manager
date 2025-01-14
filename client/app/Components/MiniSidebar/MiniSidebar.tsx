@@ -1,6 +1,7 @@
 "use client"; // Add this directive at the top of the file
 
 import IconCheck from "@/public/icons/iconCheck";
+import IconDeleteAll from "@/public/icons/iconDeleteAll";
 import IconFileCheck from "@/public/icons/iconFileCheck";
 import IconGrid from "@/public/icons/iconGrid";
 import IconStopwatch from "@/public/icons/iconStopwatch";
@@ -18,7 +19,7 @@ function MiniSidebar() {
 
   const navItems = [
     {
-      icon: <IconGrid />,
+      icon: <IconGrid strokeColor={getStrokeColor("/")} />,
       title: "All",
       link: "/",
     },
@@ -42,7 +43,7 @@ function MiniSidebar() {
   return (
     <div className="basis-[5rem] flex flex-col bg-[#f9f9f9]">
       <div className="flex items-center justify-center h-[5rem]">
-        <Image src="/logo.png" alt="Logo" width={40} height={40} />
+        <Image src="/logo.png" alt="Logo" width={45} height={45} />
       </div>
 
       <div className="mt-8 flex-1 flex flex-col items-center justify-between">
@@ -56,6 +57,12 @@ function MiniSidebar() {
             </li>
           ))}
         </ul>
+
+        <div className="mb-[1.5rem]">
+          <button className="w-12 h-12 flex justify-center items-center border-2 border-[#EB4E31]  p-2 rounded-full">
+            <IconDeleteAll strokeColor="#EB4E31" />
+          </button>
+        </div>
       </div>
     </div>
   );
