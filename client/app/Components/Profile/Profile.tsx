@@ -15,8 +15,8 @@ function Profile() {
           <Image
             src={user?.photo}
             alt="avatar"
-            width={45}
-            height={45}
+            width={50}
+            height={50}
             className="rounded-full"
           />
         </div>
