@@ -1,5 +1,4 @@
 "use client";
-
 import { TrendingUp } from "lucide-react";
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
@@ -17,7 +16,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [{ month: "january", desktop: 1260, mobile: 570 }];
+import { useTasks } from "@/context/taskContext";
+
+export const description = "A radial chart with stacked sections";
 
 const chartConfig = {
   desktop: {
@@ -30,19 +31,19 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-function RadialChart() {
-  const tasksTotal = 100;
+function RadialCHart() {
+  const { tasks, completedTasks, activeTasks } = useTasks();
+  const tasksTotal = tasks.length;
 
   const chartData = [
     {
-      pending: 80,
-      completed: 20,
+      pending: activeTasks.length,
+      completed: completedTasks.length,
     },
   ];
 
   return (
     <Card className="flex flex-col border-2 border-white shadow-none bg-[#EDEDED]">
-      {" "}
       <CardHeader className="items-center pb-0">
         <CardTitle>Comleted vs Pending Tasks</CardTitle>
         <CardDescription>Task completion status.</CardDescription>
@@ -108,14 +109,14 @@ function RadialChart() {
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
           Task completion improved by 12% this month{" "}
-          <TrendingUp className="h-4 w-4" />{" "}
+          <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Analysis based on tasks completed in the last 30 days.{" "}
+          Analysis based on tasks completed in the last 30 days.
         </div>
       </CardFooter>
     </Card>
   );
 }
 
-export default RadialChart;
+export default RadialCHart;

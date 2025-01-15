@@ -1,7 +1,7 @@
+import axios from "axios";
 import React, { createContext, useEffect } from "react";
 import { useUserContext } from "./userContext";
 import toast from "react-hot-toast";
-import axios from "axios";
 
 const TasksContext = createContext();
 
@@ -9,14 +9,15 @@ const serverUrl = "http://localhost:8000/api/v1";
 
 export const TasksProvider = ({ children }) => {
   const userId = useUserContext().user._id;
+
   const [tasks, setTasks] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [task, setTask] = React.useState({});
 
+  const [isEditing, setIsEditing] = React.useState(false);
   const [priority, setPriority] = React.useState("all");
   const [activeTask, setActiveTask] = React.useState(null);
   const [modalMode, setModalMode] = React.useState("");
-  const [isEditing, setIsEditing] = React.useState(false);
   const [profileModal, setProfileModal] = React.useState(false);
 
   const openModalForAdd = () => {
@@ -43,6 +44,7 @@ export const TasksProvider = ({ children }) => {
     setTask({});
   };
 
+  // get tasks
   const getTasks = async () => {
     setLoading(true);
     try {
@@ -123,9 +125,17 @@ export const TasksProvider = ({ children }) => {
     }
   };
 
+  // get completed tasks
+  const completedTasks = tasks.filter((task) => task.completed);
+
+  // get pending tasks
+  const activeTasks = tasks.filter((task) => !task.completed);
+
   useEffect(() => {
     getTasks();
   }, [userId]);
+
+  console.log("Active tasks", activeTasks);
 
   return (
     <TasksContext.Provider
@@ -144,7 +154,14 @@ export const TasksProvider = ({ children }) => {
         isEditing,
         setIsEditing,
         openModalForAdd,
+        openModalForEdit,
         activeTask,
+        closeModal,
+        modalMode,
+        openProfileModal,
+        activeTasks,
+        completedTasks,
+        profileModal,
       }}
     >
       {children}

@@ -1,28 +1,37 @@
 "use client";
+import { useTasks } from "@/context/taskContext";
 import { useUserContext } from "@/context/userContext";
 import { github, moon, profile } from "@/utils/Icons";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 function Header() {
   const { user } = useUserContext();
+  const { openModalForAdd, activeTasks } = useTasks();
+
+  const router = useRouter();
+
   const { name } = user;
+
   const userId = user._id;
 
-  console.log(user);
   return (
     <header className="px-6 my-4 w-full flex items-center justify-between bg-[#f9f9f9]">
       <div>
         <h1 className="text-lg font-medium">
           <span role="img" aria-label="wave">
-            👋🏽
+            👋
           </span>
-          {userId ? `Welcome,${name}!` : "Welcome to Taskify"}
+          {userId ? `Welcome, ${name}!` : "Welcome to Taskfyer"}
         </h1>
         <p className="text-sm">
           {userId ? (
             <>
-              You Have <span className="font-bold text-[$3aafae]">5</span>
+              You have{" "}
+              <span className="font-bold text-[#3aafae]">
+                {activeTasks.length}
+              </span>
               &nbsp;active tasks
             </>
           ) : (
@@ -34,13 +43,20 @@ function Header() {
         <button
           className="px-8 py-3 bg-[#3aafae] text-white rounded-[50px]
           hover:bg-[#00A1F1] hover:text-white transition-all duration-200 ease-in-out"
+          onClick={() => {
+            if (userId) {
+              openModalForAdd();
+            } else {
+              router.push("/login");
+            }
+          }}
         >
-          Create a new Task
+          {userId ? "Add a new Task" : "Login / Register"}
         </button>
 
         <div className="flex gap-4 items-center">
           <Link
-            href="https://github.com/AndreasNugoho/task-manager"
+            href="https://github.com/Maclinz/taskfyer"
             passHref
             target="_blank"
             rel="noopener noreferrer"
@@ -49,7 +65,7 @@ function Header() {
             {github}
           </Link>
           <Link
-            href="https://github.com/AndreasNugoho/task-manager"
+            href="https://github.com/Maclinz/taskfyer"
             passHref
             target="_blank"
             rel="noopener noreferrer"
@@ -58,7 +74,7 @@ function Header() {
             {moon}
           </Link>
           <Link
-            href="https://github.com/AndreasNugoho/task-manager"
+            href="https://github.com/Maclinz/taskfyer"
             passHref
             target="_blank"
             rel="noopener noreferrer"
