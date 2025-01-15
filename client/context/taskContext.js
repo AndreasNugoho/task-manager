@@ -1,5 +1,7 @@
-import React, { Children, createContext, useEffect } from "react";
+import React, { createContext, useEffect } from "react";
 import { useUserContext } from "./userContext";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const TasksContext = createContext();
 
@@ -11,9 +13,36 @@ export const TasksProvider = ({ children }) => {
   const [loading, setLoading] = React.useState(false);
   const [task, setTask] = React.useState({});
 
-  const [priority, setPriority] = React.useState("All");
+  const [priority, setPriority] = React.useState("all");
+  const [activeTask, setActiveTask] = React.useState(null);
+  const [modalMode, setModalMode] = React.useState("");
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [profileModal, setProfileModal] = React.useState(false);
 
-  // get tasks
+  const openModalForAdd = () => {
+    setModalMode("add");
+    setIsEditing(true);
+    setTask({});
+  };
+
+  const openModalForEdit = (task) => {
+    setModalMode("edit");
+    setIsEditing(true);
+    setActiveTask(task);
+  };
+
+  const openProfileModal = () => {
+    setProfileModal(true);
+  };
+
+  const closeModal = () => {
+    setIsEditing(false);
+    setProfileModal(false);
+    setModalMode("");
+    setActiveTask(null);
+    setTask({});
+  };
+
   const getTasks = async () => {
     setLoading(true);
     try {
@@ -26,7 +55,7 @@ export const TasksProvider = ({ children }) => {
     setLoading(false);
   };
 
-  //get task by id
+  // get task
   const getTask = async (taskId) => {
     setLoading(true);
     try {
@@ -39,7 +68,6 @@ export const TasksProvider = ({ children }) => {
     setLoading(false);
   };
 
-  // create task
   const createTask = async (task) => {
     setLoading(true);
     try {
@@ -55,7 +83,6 @@ export const TasksProvider = ({ children }) => {
     setLoading(false);
   };
 
-  // update task
   const updateTask = async (task) => {
     setLoading(true);
     try {
@@ -74,7 +101,6 @@ export const TasksProvider = ({ children }) => {
     }
   };
 
-  // delete task
   const deleteTask = async (taskId) => {
     setLoading(true);
     try {
@@ -89,6 +115,14 @@ export const TasksProvider = ({ children }) => {
     }
   };
 
+  const handleInput = (name) => (e) => {
+    if (name === "setTask") {
+      setTask(e);
+    } else {
+      setTask({ ...task, [name]: e.target.value });
+    }
+  };
+
   useEffect(() => {
     getTasks();
   }, [userId]);
@@ -99,12 +133,18 @@ export const TasksProvider = ({ children }) => {
         tasks,
         loading,
         task,
+        tasks,
         getTask,
         createTask,
         updateTask,
         deleteTask,
         priority,
         setPriority,
+        handleInput,
+        isEditing,
+        setIsEditing,
+        openModalForAdd,
+        activeTask,
       }}
     >
       {children}
